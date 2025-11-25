@@ -1,10 +1,8 @@
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
-  Link,
 } from "react-router-dom";
-import MoviePage from "./page/movie";
+import MoviePage from "./page/Movie";
 import BookingPage from "./page/Booking";
 import Catalog from "./page/Catalog";
 
