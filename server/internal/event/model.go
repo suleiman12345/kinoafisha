@@ -5,4 +5,5 @@ type Event struct {
     Price   int    `json:"price"`
     ID 		string `json:"id"`
 	MovieID string `json:"movieId"`
+	TakenSeats []int `json:"takenSeats"`
 }

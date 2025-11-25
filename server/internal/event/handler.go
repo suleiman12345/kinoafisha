@@ -2,6 +2,7 @@ package event
 
 import (
 	"encoding/json"
+	"fmt"
 	"kinoafisha/pkg/email"
 	"kinoafisha/pkg/response"
 	"net/http"
@@ -10,7 +11,9 @@ import (
 )
 
 type BuyTicketRequest struct {
-	Email string `json:"email"`
+    Email   string `json:"email"`
+    EventID string `json:"eventId"`
+    Seat    int    `json:"seat"`
 }
 
 type Handler struct {
@@ -46,26 +49,40 @@ func (h *Handler) GetFilmEvents(w http.ResponseWriter, r *http.Request) {
 	response.JSON(w, http.StatusOK, e)
 }
 
-func (h *Handler) BuyTicket(w http.ResponseWriter, r *http.Request) {
-	var req BuyTicketRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		response.Error(w, http.StatusBadRequest, "invalid request body")
-		return
-	}
-	if req.Email == "" {
-		response.Error(w, http.StatusBadRequest, "email is required")
-		return
-	}
+func (h *Handler) BookTicket(w http.ResponseWriter, r *http.Request) {
+    var req BuyTicketRequest
 
-	subject := "Подтверждение бронирования"
-	body := "Спасибо за бронирование билета!"
+    if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+        response.Error(w, http.StatusBadRequest, "invalid request body")
+        return
+    }
 
-	err := h.smtpClient.SendEmail([]string{req.Email}, subject, body)
-	if err != nil {
-		response.Error(w, http.StatusInternalServerError, "failed to send email")
-		return
-	}
-	println(3)
-	response.JSON(w, http.StatusOK, map[string]string{"message": "Email отправлен"})
+    if req.Email == "" || req.EventID == "" || req.Seat <= 0 {
+        response.Error(w, http.StatusBadRequest, "email, eventId and seat are required")
+        return
+    }
 
+    if err := AddTakenSeat(req.EventID, req.Seat); err != nil {
+        response.Error(w, http.StatusBadRequest, err.Error())
+        return
+    }
+
+    subject := "Подтверждение бронирования"
+    body := fmt.Sprintf(
+        "Ваш билет забронирован!\nСеанс: %s\nМесто: %d\nСпасибо за бронирование!",
+        req.EventID, req.Seat,
+    )
+
+    if err := h.smtpClient.SendEmail([]string{req.Email}, subject, body); err != nil {
+        response.Error(w, http.StatusInternalServerError, "failed to send email")
+        return
+    }
+
+    response.JSON(w, http.StatusOK, map[string]interface{}{
+        "message": "Бронирование подтверждено",
+        "eventId": req.EventID,
+        "seat":    req.Seat,
+        "email":   req.Email,
+    })
 }
+

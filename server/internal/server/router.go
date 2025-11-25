@@ -29,7 +29,7 @@ func InitRouter(smtpClient *email.SMTPClient) http.Handler {
 	r.Get("/", movieHandler.GetAllMovies)
 	r.Get("/movie/{id}", movieHandler.GetMovieByID)
 	r.Get("/movie/{id}/events", eventHandler.GetFilmEvents)
-	r.Post("/booking/event", eventHandler.BuyTicket)
+	r.Post("/booking/event", eventHandler.BookTicket)
 	r.Get("/booking/event/{id}", eventHandler.GetEventByID)
 
 	r.Handle("/public/*", http.StripPrefix("/public/", http.FileServer(http.Dir("./public"))))

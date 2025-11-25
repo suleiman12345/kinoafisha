@@ -6,22 +6,45 @@ const BookingPage = () => {
 
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const [event, setEvent] = useState(null); // <-- исправлено
+  const [event, setEvent] = useState(null);
+  const [selectedSeat, setSelectedSeat] = useState(null);
+console.log(event);
 
+  const rows = 5;
+  const seatsPerRow = 8;
+
+  // Загружаем событие с сервера
   useEffect(() => {
     fetch(`http://localhost:8080/booking/event/${eventId}`)
       .then((res) => {
         if (!res.ok) throw new Error("Событие не найдено");
         return res.json();
       })
-      .then((data) => {
-        setEvent(data);
-      })
-      .catch((err) => {
-        console.error("Ошибка при загрузке события:", err);
-        setEvent(null); // чтобы отобразить ошибку
-      });
+      .then((data) => setEvent(data))
+      .catch(() => setEvent(null));
   }, [eventId]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:8080/booking/event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          eventId,
+          seat: selectedSeat,
+        }),
+      });
+
+      if (!response.ok) throw new Error();
+
+      setSubmitted(true);
+    } catch {
+      console.error("Ошибка бронирования");
+    }
+  };
 
   if (event === null) {
     return (
@@ -31,27 +54,9 @@ const BookingPage = () => {
     );
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  if (!event) return <div>Загрузка...</div>;
 
-    try {
-      const response = await fetch("http://localhost:8080/booking/event", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, eventId }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Ошибка при отправке запроса");
-      }
-
-      setSubmitted(true);
-    } catch (error) {
-      console.error("Ошибка:", error);
-    }
-  };
-
-  if (!event) return <div>Загрузка...</div>; // на время загрузки
+const occupiedSeats = event.takenSeats || [];
 
   return (
     <div className="p-6 max-w-xl mx-auto">
@@ -70,29 +75,75 @@ const BookingPage = () => {
       </div>
 
       {!submitted ? (
-        <form className="mt-6 flex flex-col gap-4" onSubmit={handleSubmit}>
-          <label className="flex flex-col gap-2">
-            <span className="font-medium">Ваш email</span>
-            <input
-              type="email"
-              required
-              placeholder="example@gmail.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </label>
+        <>
+          <h3 className="text-lg font-semibold mt-6 mb-2">Выберите место</h3>
 
-          <button
-            type="submit"
-            className="bg-custom-lightblue cursor-pointer text-white py-3 rounded-lg hover:bg-blue-400 transition active:scale-95"
-          >
-            Забронировать
-          </button>
-        </form>
+          <div className="grid grid-cols-8 gap-2 p-4 bg-gray-100 rounded-lg">
+            {Array.from({ length: rows * seatsPerRow }, (_, index) => {
+              const seatNumber = index + 1;
+              const isOccupied = occupiedSeats.includes(seatNumber);
+
+              return (
+                <button
+                  key={seatNumber}
+                  onClick={() => !isOccupied && setSelectedSeat(seatNumber)}
+                  disabled={isOccupied}
+                  className={`
+                    p-2 rounded text-sm border 
+                    ${
+                      isOccupied
+                        ? "bg-gray-400 text-white cursor-not-allowed"
+                        : ""
+                    }
+                    ${
+                      !isOccupied && selectedSeat === seatNumber
+                        ? "bg-blue-400 text-white border-blue-400"
+                        : ""
+                    }
+                    ${
+                      !isOccupied && selectedSeat !== seatNumber
+                        ? "bg-white hover:bg-gray-200 cursor-pointer"
+                        : ""
+                    }
+                  `}
+                >
+                  {seatNumber}
+                </button>
+              );
+            })}
+          </div>
+
+          <form className="mt-6 flex flex-col gap-4" onSubmit={handleSubmit}>
+            <label className="flex flex-col gap-2">
+              <span className="font-medium">Ваш email</span>
+              <input
+                type="email"
+                required
+                placeholder="example@gmail.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </label>
+
+            <button
+              type="submit"
+              disabled={!selectedSeat}
+              className={`py-3 rounded-lg transition active:scale-95 ${
+                selectedSeat
+                  ? "bg-custom-lightblue text-white hover:bg-blue-400"
+                  : "bg-gray-300 cursor-not-allowed"
+              }`}
+            >
+              Забронировать
+            </button>
+          </form>
+        </>
       ) : (
         <div className="mt-6 text-center text-green-600 font-medium text-lg">
           Бронирование подтверждено!
+          <br />
+          Место: <b>{selectedSeat}</b>
           <br />
           Билет отправлен на <b>{email}</b>
         </div>
@@ -101,4 +152,4 @@ const BookingPage = () => {
   );
 };
 
-export default BookingPage
+export default BookingPage;
