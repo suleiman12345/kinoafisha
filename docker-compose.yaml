@@ -1,0 +1,25 @@
+services:
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: kinoafisha_backend
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: kinoafisha_frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API=http://backend:8080
+    depends_on:
+      - backend
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
+      - ./client/index.html:/app/index.html
+      - ./client/tailwind.config.js:/app/tailwind.config.js

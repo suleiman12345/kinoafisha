@@ -1,0 +1,50 @@
+[
+  {
+    "id": "ef1c83fd-7e8b-40ea-ba9f-2fd878abc101",
+    "movieId": "7f3a9c4e-0c2d-4c71-9e55-1e84c1a9c728",
+    "time": "16:20",
+    "price": 300
+  },
+  {
+    "id": "ef1c83fd-7e8b-40ea-ba9f-2fd878abc102",
+    "movieId": "7f3a9c4e-0c2d-4c71-9e55-1e84c1a9c728",
+    "time": "18:40",
+    "price": 350
+  },
+  {
+    "id": "cb8f3524-f7f0-4d10-a2ef-7bf712abc201",
+    "movieId": "c2a4e1fb-5f93-4bc7-8a71-3de845c9960f",
+    "time": "14:10",
+    "price": 320
+  },
+  {
+    "id": "cb8f3524-f7f0-4d10-a2ef-7bf712abc202",
+    "movieId": "c2a4e1fb-5f93-4bc7-8a71-3de845c9960f",
+    "time": "20:30",
+    "price": 400
+  },
+  {
+    "id": "a12fb120-0821-4df7-bd52-0530efabc301",
+    "movieId": "1db74c0b-d0be-47d8-9b4a-5980fa8b4c11",
+    "time": "22:00",
+    "price": 280
+  },
+  {
+    "id": "d331d982-551f-4c49-a037-98eabcabc401",
+    "movieId": "e94a1cb2-2c4c-47ff-9fa5-6bcbd9bf1ed2",
+    "time": "17:00",
+    "price": 330
+  },
+  {
+    "id": "fa21b8a7-14e7-48bb-93f3-fd2efcabc501",
+    "movieId": "f3c68a8e-7e4d-40b1-b5af-0c2e9d8aed79",
+    "time": "15:20",
+    "price": 300
+  },
+  {
+    "id": "fa21b8a7-14e7-48bb-93f3-fd2efcabc502",
+    "movieId": "f3c68a8e-7e4d-40b1-b5af-0c2e9d8aed79",
+    "time": "19:45",
+    "price": 350
+  }
+]

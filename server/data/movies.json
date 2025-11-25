@@ -1,0 +1,47 @@
+[
+  {
+    "id": "7f3a9c4e-0c2d-4c71-9e55-1e84c1a9c728",
+    "title": "The Godfather",
+    "year": 1972,
+    "description": "Криминальная драма о мафиозной семье Корлеоне и превращении Майкла из стороннего наблюдателя в главу семейства.",
+    "director": "Francis Ford Coppola",
+    "runtime_minutes": 175,
+    "rating": 9.2
+  },
+  {
+    "id": "c2a4e1fb-5f93-4bc7-8a71-3de845c9960f",
+    "title": "Inception",
+    "year": 2010,
+    "description": "Научно-фантастический триллер о проникновении в подсознание через сны и внедрении идей.",
+    "director": "Christopher Nolan",
+    "budget_usd": 160000000,
+    "rating": 8.8
+  },
+  {
+    "id": "1db74c0b-d0be-47d8-9b4a-5980fa8b4c11",
+    "title": "Pulp Fiction",
+    "year": 1994,
+    "description": "Переплетающиеся истории преступников, бандитов и случайных событий.",
+    "director": "Quentin Tarantino",
+    "runtime_minutes": 154,
+    "rating": 8.9
+  },
+  {
+    "id": "e94a1cb2-2c4c-47ff-9fa5-6bcbd9bf1ed2",
+    "title": "The Shawshank Redemption",
+    "year": 1994,
+    "description": "История Энди Дюфрейна, несправедливо осуждённого и надеющегося на свободу.",
+    "director": "Frank Darabont",
+    "runtime_minutes": 142,
+    "rating": 9.3
+  },
+  {
+    "id": "f3c68a8e-7e4d-40b1-b5af-0c2e9d8aed79",
+    "title": "Forrest Gump",
+    "year": 1994,
+    "description": "Жизнь Форреста, доброго и искреннего человека, становящегося свидетелем ключевых событий мира.",
+    "director": "Robert Zemeckis",
+    "budget_usd": 55000000,
+    "rating": 8.8
+  }
+]
